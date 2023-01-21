@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/MainFragment">
+
+    <fragment
+        android:id="@+id/MainFragment"
+        android:name="com.example.hci_app.MainFragment"
+        android:label="HCI application"
+        tools:layout="@layout/fragment_first">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_menuFragmentSecond"
+            app:destination="@id/menuFragmentSecond" />
+        <action
+            android:id="@+id/action_FirstFragment_to_menuFragmentFirst"
+            app:destination="@id/menuFragmentFirst" />
+        <action
+            android:id="@+id/action_MainFragment_to_menuFragmentThird"
+            app:destination="@id/menuFragmentThird" />
+    </fragment>
+    <fragment
+        android:id="@+id/menuFragmentSecond"
+        android:name="com.example.hci_app.MenuFragmentSecond"
+        android:label="Second menu"
+        tools:layout="@layout/fragment_menu_second"/>
+    <fragment
+        android:id="@+id/menuFragmentFirst"
+        android:name="com.example.hci_app.MenuFragmentFirst"
+        android:label="First menu"
+        tools:layout="@layout/fragment_menu_first" />
+    <fragment
+        android:id="@+id/menuFragmentThird"
+        android:name="com.example.hci_app.MenuFragmentThird"
+        android:label="Third menu"
+        tools:layout="@layout/fragment_menu_third" />
+</navigation>
