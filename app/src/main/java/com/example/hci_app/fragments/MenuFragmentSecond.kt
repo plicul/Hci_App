@@ -1,4 +1,4 @@
-package com.example.hci_app
+package com.example.hci_app.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,16 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hci_app.databinding.FragmentMenuThirdBinding
+import com.example.hci_app.databinding.FragmentMenuSecondBinding
 import CategoryAdapter
 import android.util.Log
+import com.example.hci_app.models.DataModel
+import com.example.hci_app.utils.Excel
+import com.example.hci_app.models.Task
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
-class MenuFragmentThird : Fragment() {
 
-    private var _binding: FragmentMenuThirdBinding? = null
+class MenuFragmentSecond : Fragment() {
+
+    private var _binding: FragmentMenuSecondBinding? = null
 
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var category2Adapter: CategoryAdapter
@@ -34,13 +35,9 @@ class MenuFragmentThird : Fragment() {
     private var currentTask = 0
     private var startTestFlag = false
     //log
-    private var xcl: Excel = Excel();
+    private lateinit var xcl: Excel
 
     //data za menue
-    //data_easy[razina][1,2,3,4,5...]
-    //data_medium[razina][1,2,3,4,5...]
-    //data_hard[razina][1,2,3,4,5...]
-    //    val data: ArrayList<ArrayList<String>> = ArrayList()
     val data_easy: ArrayList<DataModel> = ArrayList()
     val data_medium: ArrayList<DataModel> = ArrayList()
     val data_hard: ArrayList<DataModel> = ArrayList()
@@ -55,13 +52,15 @@ class MenuFragmentThird : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentMenuThirdBinding.inflate(inflater, container, false)
+        _binding = FragmentMenuSecondBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        xcl = Excel(requireContext().getExternalFilesDir(null))
         binding.progressTxt.text="0/15"
         setupData()
         setupButtons()
@@ -518,9 +517,15 @@ class MenuFragmentThird : Fragment() {
         }
 
         data=data_easy
-
     }
+    private fun setOnClickListeners(){
+        binding.rvCategory3.setOnClickListener{
 
+            if (binding.rvCategory3.visibility == View.VISIBLE){
+                binding.rvCategory3.visibility = View.GONE
+            }
+        }
+    }
     private fun setupButtons() {
         binding.btnEasy.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
@@ -598,23 +603,13 @@ class MenuFragmentThird : Fragment() {
         }
     }
 
-
-    private fun setOnClickListeners(){
-        binding.rvCategory3.setOnClickListener{
-            // Tu nisam sigurna koji menu kojeg zatvara ti ces to znati
-            // Ako nisi siguran pitaj me
-            if (binding.rvCategory3.visibility == View.VISIBLE){
-                binding.rvCategory3.visibility = View.GONE
-            }
-        }
-    }
-
     // Adapteri:
     private fun setUpFirstMenuAdapter() {
         val categoryList: ArrayList<String> = ArrayList()
         for(datamodel in data){
             categoryList.add(datamodel.name)
         }
+
         categoryAdapter = CategoryAdapter(
             categoryList,
             requireContext(),
@@ -646,9 +641,8 @@ class MenuFragmentThird : Fragment() {
             }
         )
         binding.rvCategory2.adapter = category2Adapter
-        val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.rvCategory2.layoutManager = layoutManager
-        binding.rvCategory2.scrollToPosition(5)
     }
 
     private fun setUpThirdMenuAdapter(firstRowPosition: Int, secondRowPosition: Int) {
@@ -694,16 +688,14 @@ class MenuFragmentThird : Fragment() {
         lastSelectedPositionSecondRow = -1
     }
 
-    private fun onSecondMenuClicked(firstRowPosition: Int, secondRowPosition: Int) {
+    public fun onSecondMenuClicked(firstRowPosition: Int, secondRowPosition: Int) {
         itemsClicked++
         if (secondRowPosition == lastSelectedPositionSecondRow) {
             binding.rvCategory3.visibility = View.GONE
-            binding.rvCategory1.visibility = View.VISIBLE
             lastSelectedPositionSecondRow = -1
         } else {
             setUpThirdMenuAdapter(firstRowPosition, secondRowPosition)
             binding.rvCategory3.visibility = View.VISIBLE
-            binding.rvCategory1.visibility=View.GONE
             lastSelectedPositionSecondRow = secondRowPosition
         }
 
@@ -715,18 +707,12 @@ class MenuFragmentThird : Fragment() {
                 val currentTime = System.currentTimeMillis()
                 val timeElapsed = currentTime - startTime
                 if(currentTask==14){
-                    //isprintaj u file još jednom
-                    Log.d("Timer", "Time elapsed: $timeElapsed" + " END")
                     xcl.addData(timeElapsed.toDouble(),currentTask+1, difficulty, itemsClicked)
                     xcl.saveFile()
-                    //instanciraj novu datoteku za log
-                    xcl=Excel()
-                    //stavi current task u -1 i difficulty u -1
-                    //hideaj sve
+                    xcl= Excel(requireContext().getExternalFilesDir(null))
                     currentTask=-1
                     difficulty=-1
                     itemsClicked=0
-                    binding.rvCategory1.visibility=View.VISIBLE
                     binding.rvCategory2.visibility=View.GONE
                     binding.rvCategory3.visibility=View.GONE
                     lastSelectedPositionFirstRow = -1
@@ -736,21 +722,18 @@ class MenuFragmentThird : Fragment() {
 
                     return
                 }
-                binding.rvCategory1.visibility=View.VISIBLE
                 binding.rvCategory2.visibility=View.GONE
                 binding.rvCategory3.visibility=View.GONE
                 lastSelectedPositionFirstRow = -1
                 lastSelectedPositionSecondRow = -1
                 currentTask++
                 binding.progressTxt.text = "$currentTask/15"
-                //tu printaj u log file
                 xcl.addData(timeElapsed.toDouble(),currentTask+1, difficulty, itemsClicked)
                 itemsClicked=0
                 Log.d("Timer", "Time elapsed: $timeElapsed")
             }
         }
     }
-
     public fun startTimerEasy() {
         startTime = System.currentTimeMillis()
         data=data_easy

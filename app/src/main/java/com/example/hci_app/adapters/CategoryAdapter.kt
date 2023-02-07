@@ -21,14 +21,11 @@ class CategoryAdapter(private val list: ArrayList<String>,
         val item = list[position]
         with(holder) {
 
-            // Dodavanje teksta u karticu:
             holder.binding.textView.text = item.toString()
 
-            // Promjena slike kad dodas drawable:
             holder.binding.imageView.setImageResource(R.mipmap.ic_launcher)
 
             holder.itemView.setOnClickListener{
-                // Kada se stisne na item neki u menu
                 onItemClick(position)
             }
         }

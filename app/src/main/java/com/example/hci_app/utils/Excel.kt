@@ -1,8 +1,9 @@
-package com.example.hci_app
+package com.example.hci_app.utils
 
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import jxl.Sheet
 import jxl.Workbook
 import jxl.write.Label
@@ -10,9 +11,9 @@ import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
 import java.io.File
 
-class Excel() {
-    val root = Environment.getExternalStorageDirectory()
-    var dir : File = File(root.absolutePath + "/hci_app")
+class Excel(path: File?) {
+    //val root = Environment.getExternalStorageDirectory()
+    var dir : File = File(path!!.absolutePath)
     var file : File
     var workbook : WritableWorkbook
     var sheet : WritableSheet
@@ -21,6 +22,7 @@ class Excel() {
 
     init{
         dir.mkdirs()
+        val files = dir.listFiles()
 
 
         file = File(dir, "log"+counter+".xls")

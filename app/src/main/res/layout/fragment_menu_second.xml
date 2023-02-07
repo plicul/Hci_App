@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainFragment">
+    tools:context=".fragments.MainFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_category_1"
@@ -16,10 +16,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_category_2"
-        android:layout_width="200dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/rv_category_1"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/category_item" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -45,7 +46,6 @@
         android:layout_marginEnd="160dp"
         android:text="Easy"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,13 +54,12 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginTop="548dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="160dp"
         android:text="Hard"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btn_medium" />
 
     <Button
         android:id="@+id/btn_medium"
@@ -68,13 +67,12 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="160dp"
-        android:layout_marginTop="448dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="160dp"
         android:text="Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btn_easy" />
 
     <TextView
         android:id="@+id/progress_txt"
@@ -82,7 +80,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="172dp"
+        android:layout_marginBottom="50dp"
         android:text="@{progressTxt}"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_easy" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_easy"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

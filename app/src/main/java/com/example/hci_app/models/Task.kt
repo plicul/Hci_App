@@ -1,4 +1,4 @@
-package com.example.hci_app
+package com.example.hci_app.models
 
 class Task(firstRowPosition: Int, secondRowPosition: Int, thirdRowPosition: Int) {
     var first: Int = firstRowPosition

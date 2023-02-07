@@ -1,4 +1,4 @@
-package com.example.hci_app
+package com.example.hci_app.fragments
 
 import CategoryAdapter
 import android.os.Bundle
@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hci_app.models.DataModel
+import com.example.hci_app.utils.Excel
+import com.example.hci_app.models.Task
 import com.example.hci_app.databinding.FragmentMenuFirstBinding
 
 
@@ -31,14 +34,10 @@ class MenuFragmentFirst : Fragment() {
     private var currentTask = 0
     private var startTestFlag = false
     //log
-    private var xcl: Excel = Excel();
+    private lateinit var xcl: Excel
 
 
     //data za menue
-    //data_easy[razina][1,2,3,4,5...]
-    //data_medium[razina][1,2,3,4,5...]
-    //data_hard[razina][1,2,3,4,5...]
-    //    val data: ArrayList<ArrayList<String>> = ArrayList()
     val data_easy: ArrayList<DataModel> = ArrayList()
     val data_medium: ArrayList<DataModel> = ArrayList()
     val data_hard: ArrayList<DataModel> = ArrayList()
@@ -61,6 +60,7 @@ class MenuFragmentFirst : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        xcl = Excel(requireContext().getExternalFilesDir(null))
         binding.progressTxt.text="0/15"
         setupData()
         setupButtons()
@@ -70,6 +70,7 @@ class MenuFragmentFirst : Fragment() {
     }
 
     private fun setupData() {
+
         //razina menija
         /*for (i in 0..2) {
             if(i==0){
@@ -726,14 +727,10 @@ class MenuFragmentFirst : Fragment() {
                 val currentTime = System.currentTimeMillis()
                 val timeElapsed = currentTime - startTime
                 if(currentTask==14){
-                    //isprintaj u file još jednom
                     Log.d("Timer", "Time elapsed: $timeElapsed" + " END")
                     xcl.addData(timeElapsed.toDouble(),currentTask+1, difficulty, itemsClicked)
                     xcl.saveFile()
-                    //instanciraj novu datoteku za log
-                    xcl=Excel()
-                    //stavi current task u -1 i difficulty u -1
-                    //hideaj sve
+                    xcl= Excel(requireContext().getExternalFilesDir(null))
                     currentTask=-1
                     difficulty=-1
                     itemsClicked=0
@@ -752,10 +749,8 @@ class MenuFragmentFirst : Fragment() {
                 lastSelectedPositionSecondRow = -1
                 currentTask++
                 binding.progressTxt.text = "$currentTask/15"
-                //tu printaj u log file
                 xcl.addData(timeElapsed.toDouble(),currentTask+1, difficulty, itemsClicked)
                 itemsClicked=0
-                Log.d("Timer", "Time elapsed: $timeElapsed")
             }
         }
     }

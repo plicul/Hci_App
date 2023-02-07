@@ -1,7 +1,4 @@
-package com.example.hci_app
-
-import android.provider.ContactsContract.Data
-import java.io.File
+package com.example.hci_app.models
 
 class DataModel(namestr: String) {
     fun addChild(dataModel: DataModel) {
